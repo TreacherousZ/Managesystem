@@ -19,7 +19,7 @@ const App: React.FC = () => {
     updateUserInfo(data)
   }
   return (
-    <Watermark content='React'>
+    <Watermark content='TreacherousZ'>
       <Layout>
         <Sider collapsed={collapsed}>
           <SideMenu />
