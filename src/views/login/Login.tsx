@@ -1,35 +1,45 @@
-import React, { memo } from 'react'; // 引入 memo
-import { LoginWrapper } from "./style"; // 样式文件
-import login_bg from '@/assets/login_bg.jpg'; // 导入图片
-import { Form, Button, Input } from "antd";
-const onFinish = () => {
+import React, { memo, useState } from 'react';
+import { LoginWrapper } from "./style";
+import login_bg from '@/assets/login_bg.jpg';
+import LoginForm from '@/components/LoginForm';
+import { Login } from '@/types/api';
+import api from '@/api';
+import storage from '@/utils/storage';
+import { message } from 'antd';
+import { useStore } from '@/store';
 
-}
-const Login = memo(() => {
+
+
+const LoginFC = memo(() => {
+	const [loading, setLoading] = useState(false)
+	const updateToken = useStore(state=>state.updateToken)
+  const onFinish = async (values: Login.params) => {
+    try {
+     
+      setLoading(true)
+      const data = await api.login(values)
+      setLoading(false)
+      storage.set('token', data)
+      updateToken(data)
+      message.success('登录成功')
+      const params = new URLSearchParams(location.search)
+      setTimeout(() => {
+        location.href = params.get('callback') || '/welcome'
+      })
+    } catch (error) {
+      setLoading(false)
+    }
+  }
 	return (
 		<LoginWrapper>
 			<img src={login_bg} />
 			<div className='login-from'>
 				<div className='title'>系统登录</div>
-				<Form name='basic' initialValues={{ remember: true }} onFinish={onFinish} autoComplete='off'>
-					<Form.Item name='username' rules={[{ required: true, message: 'Please input your username!' }]}>
-						<Input />
-					</Form.Item>
-
-					<Form.Item name='password' rules={[{ required: true, message: 'Please input your password!' }]}>
-						<Input.Password />
-					</Form.Item>
-
-					<Form.Item>
-						<Button type='primary' block htmlType='submit'>
-							登录
-						</Button>
-					</Form.Item>
-				</Form>
+				<LoginForm onFinish={onFinish} loading={loading} />
 			</div>
 		</LoginWrapper>
 	);
 });
 
 
-export default Login
+export default LoginFC
