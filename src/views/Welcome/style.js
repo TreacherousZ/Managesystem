@@ -7,7 +7,7 @@ export const WelcomeWrapper = styled.div`
   padding: 40px 60px;  /* 增加左右和上下的填充 */
   margin: 0 auto;
   background-color: #fff;
-  height: calc(86.25vh);
+  height: calc(85.44vh);
 
   .content {
     flex: 1;  /* 让内容部分占据剩余空间 */

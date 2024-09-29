@@ -1,4 +1,11 @@
 .content {
-  padding: 20px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  flex: 1; /* 让中间内容区域扩展以填充页面 */
+  padding: 24px;
+  background-color: #f0f2f5;
+  overflow: auto; /* 处理内容过多的情况下自动滚动 */
 }

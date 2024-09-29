@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { LoginWrapper } from "./style";
 import login_bg from '@/assets/login_bg.jpg';
-import LoginForm from '@/components/LoginForm';
+import LoginForm from '@/hook/LoginForm';
 import { Login } from '@/types/api';
 import api from '@/api';
 import storage from '@/utils/storage';
@@ -15,7 +15,7 @@ const LoginFC = memo(() => {
 	const updateToken = useStore(state=>state.updateToken)
   const onFinish = async (values: Login.params) => {
     try {
-     
+
       setLoading(true)
       const data = await api.login(values)
       setLoading(false)

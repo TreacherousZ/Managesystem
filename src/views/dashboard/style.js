@@ -58,4 +58,24 @@ export const DashboardWrapper = styled.div`
 	}
 
 
+	.chart{
+		margin-top: 50px;
+	}
+	.itemLine{
+		height:400px
+	}
+	.pieChart{
+		display: flex;
+		height:400px
+
+	}
+.itemPie{
+	flex: 1;
+}
+
+.itemRadar {
+  width: 100%;  /* 或者一个具体的宽度，比如 600px */
+  height: 400px;  /* 必须设置明确的高度，ECharts 需要这个高度来渲染 */
+}
+
 `
