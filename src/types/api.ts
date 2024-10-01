@@ -1,12 +1,21 @@
 // 接口类型定义
 
-import Dashboard from "@/views/dashboard"
 
 export interface Result<T = any> {
 	code: number
 	data: T,
 	msg: string
 }
+
+export interface ResultData<T = any> {
+	list: T[]
+	page: {
+		pageNum: number
+		pageSize: number
+		total: number | 0
+	}
+}
+
 export namespace Login {
 	export interface params {
 		userName: string
@@ -15,6 +24,12 @@ export namespace Login {
 }
 
 export namespace User {
+	export interface Params{
+		userId?:number
+		userName?: string
+		state?: number
+	}
+
 	export interface UserItem {
 		"_id": string,
 		"userId": number,
@@ -32,28 +47,28 @@ export namespace User {
 	}
 }
 
-export namespace dashboard{
-	export interface ReportData{
-		driverCount:number;
-		totalMoney:number;
-		orderCount:number;
-		cityNum:number
+export namespace dashboard {
+	export interface ReportData {
+		driverCount: number;
+		totalMoney: number;
+		orderCount: number;
+		cityNum: number
 	}
 
-	export interface LineData{
+	export interface LineData {
 		label: string[],
 		order: number[],
 		money: number[]
 	}
 
-	export interface PieData{
+	export interface PieData {
 		value: number,
 		name: string
 	}
 
 	export interface RadarData {
-		indicator: Array<{name: string; max: number}>
-		data:{
+		indicator: Array<{ name: string; max: number }>
+		data: {
 			name: string
 			value: number[]
 		}

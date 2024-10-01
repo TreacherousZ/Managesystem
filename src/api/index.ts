@@ -4,7 +4,7 @@
 
 
 import request from "@/utils/request";
-import { Login, User, dashboard } from "@/types/api";
+import { Login, ResultData, User, dashboard } from "@/types/api";
 
 export default {
 	//登录
@@ -36,8 +36,14 @@ export default {
 		return request.get<dashboard.PieData[]>('/order/dashboard/getPieAgeData')
 	},
 
-		//获取雷达图数据
-		getRadarData() {
-			return request.get<dashboard.RadarData>('/order/dashboard/getRadarData')
-		},
+	//获取雷达图数据
+	getRadarData() {
+		return request.get<dashboard.RadarData>('/order/dashboard/getRadarData')
+	},
+
+	//获取用户列表
+	getUserList() {
+		return request.get<ResultData<User.UserItem>>('/users/list')
+
+	}
 }
