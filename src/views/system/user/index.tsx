@@ -2,18 +2,57 @@ import React, { memo, useEffect, useState } from 'react'
 import { UserWrapper } from './styls'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import { User } from '@/types/api'
+import { PageParams, User } from '@/types/api'
 import api from '@/api'
 import { formatDate } from '@/utils'
 
 const UserList = memo(() => {
+	const [form] = Form.useForm()
 	const [data, setData] = useState<User.UserItem[]>([])
+	const [total, setTotal] = useState(0)
+	const [pagination, setPagination] = useState({
+		current: 1,
+		pageSize: 10
+	})
 	useEffect(() => {
-		getUserList()
-	}, [])
-	const getUserList = async () => {
-		const data = await api.getUserList()
-		setData(data.list)
+		getUserList({
+			pageNum: pagination.current,
+			pageSize: pagination.pageSize
+		})
+	}, [pagination.current, pagination.pageSize])
+
+	//搜索
+	const handleSearch = () => {
+		getUserList({
+			pageNum: 1,
+			pageSize: pagination.pageSize
+		})
+	}
+//重置表单
+	const handleReset = ()=>{
+		form.resetFields()
+	}
+
+	//获取用户列表
+
+	const getUserList = async (params: PageParams) => {
+		const values = form.getFieldsValue()
+		const data = await api.getUserList({
+			...values,
+			pageNum: params.pageNum,
+			pageSize: params.pageSize
+		})
+		const list = Array.from({ length: 50 }).fill({}).map((item: any) => {
+			item = { ...data.list[0] }
+			item.userId = Math.random()
+			return item
+		})
+		setData(list)
+		setTotal(list.length)
+		setPagination({
+			current: data.page.pageNum,
+			pageSize: data.page.pageSize
+		})
 	}
 
 	const dataSource = [
@@ -94,10 +133,9 @@ const UserList = memo(() => {
 			}
 		}
 	];
-
 	return (
 		<UserWrapper>
-			<Form className="searchForm" layout='inline' initialValues={{ state: 1 }}>
+			<Form className="searchForm" form={form} layout='inline' initialValues={{ state: 1 }}>
 				<Form.Item name='userId' label='用户ID'>
 					<Input placeholder='请输入用户ID' />
 				</Form.Item>
@@ -114,8 +152,8 @@ const UserList = memo(() => {
 				</Form.Item>
 				<Form.Item>
 					<Space>
-						<Button type='primary' className='mr10'>搜索</Button>
-						<Button type='default'>重置</Button>
+						<Button type='primary' className='mr10' onClick={handleSearch}>搜索</Button>
+						<Button type='default' onClick={handleReset}>重置</Button>
 					</Space>
 
 				</Form.Item>
@@ -128,7 +166,30 @@ const UserList = memo(() => {
 						<Button type='primary' danger>批量删除</Button>
 					</div>
 				</div>
-				<Table bordered rowSelection={{ type: 'checkbox' }} dataSource={data} columns={columns} />
+				<Table
+					bordered
+					rowKey='userId'
+					rowSelection={{ type: 'checkbox' }}
+					dataSource={data}
+					columns={columns}
+					pagination={{
+						position: ['bottomRight'],
+						current: pagination.current,
+						pageSize:pagination.pageSize,
+						total,
+						showQuickJumper:true,
+						showSizeChanger: true,
+						showTotal: function(total) {
+							return `总共${total}条`
+						},
+						onChange:(page, pageSize)=>{
+							setPagination({
+								current: page,
+								pageSize
+							})
+						}
+					}}
+				/>
 
 			</div>
 

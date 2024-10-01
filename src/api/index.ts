@@ -42,7 +42,7 @@ export default {
 	},
 
 	//获取用户列表
-	getUserList() {
+	getUserList(params: User.Params) {
 		return request.get<ResultData<User.UserItem>>('/users/list')
 
 	}
