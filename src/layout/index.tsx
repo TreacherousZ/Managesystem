@@ -10,32 +10,32 @@ import { useStore } from '@/store'
 const { Content, Sider } = Layout
 
 const App: React.FC = () => {
-  const { collapsed, updateUserInfo } = useStore()
-  useEffect(() => {
-    getUserInfo()
-  }, [])
-  const getUserInfo = async () => {
-    const data = await api.getUserInfo()
-    updateUserInfo(data)
-  }
-  return (
-    <Watermark content='TreacherousZ'>
-      <Layout>
-        <Sider collapsed={collapsed}>
-          <SideMenu />
-        </Sider>
-        <Layout>
-          <NavHeader />
-          <Content className={styles.content}>
-            <div className={styles.wrapper}>
-              <Outlet></Outlet>
-            </div>
-            <NavFooter />
-          </Content>
-        </Layout>
-      </Layout>
-    </Watermark>
-  )
+	const { collapsed, updateUserInfo } = useStore()
+	useEffect(() => {
+		getUserInfo()
+	}, [])
+	const getUserInfo = async () => {
+		const data = await api.getUserInfo()
+		updateUserInfo(data)
+	}
+	return (
+		<Watermark content='TreacherousZ' inherit={false}>
+			<Layout>
+				<Sider collapsed={collapsed}>
+					<SideMenu />
+				</Sider>
+				<Layout>
+					<NavHeader />
+					<Content className={styles.content}>
+						<div className={styles.wrapper}>
+							<Outlet></Outlet>
+						</div>
+						<NavFooter />
+					</Content>
+				</Layout>
+			</Layout>
+		</Watermark>
+	)
 }
 
 export default App

@@ -5,6 +5,8 @@ import type { ColumnsType } from 'antd/es/table'
 import { PageParams, User } from '@/types/api'
 import api from '@/api'
 import { formatDate } from '@/utils'
+import CreateUser from './CreateUser'
+
 
 const UserList = memo(() => {
 	const [form] = Form.useForm()
@@ -192,7 +194,7 @@ const UserList = memo(() => {
 				/>
 
 			</div>
-
+			<CreateUser />
 		</UserWrapper>
 	)
 })

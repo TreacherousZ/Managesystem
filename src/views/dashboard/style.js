@@ -5,7 +5,7 @@ export const DashboardWrapper = styled.div`
   padding: 40px 60px;  /* 增加左右和上下的填充 */
   margin: 0 auto;
   background-color: #fff;
-  height: calc(86.25vh);
+ 
 
 	.userInfo {
 		display: flex;
