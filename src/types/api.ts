@@ -50,7 +50,38 @@ export namespace User {
 		"userEmail": string,
 		"userImg": string
 	}
+
+	export interface CreateParams {
+		userName: string
+		userEmail: string
+		mobile?: number
+		deptId: string
+		job?: string
+		state?: number
+		roleList: string[]
+		userImg: string
+	}
+
+	export interface EditParams extends CreateParams{
+		userId:number
+	}
 }
+export namespace Dept {
+	export interface Params{
+		deptName?:string
+
+	}
+	export interface DeptItem{
+		_id:string
+		createTime:string
+		updateTime: string
+		deptName: string
+		parentId: string
+		userName: string
+		children: DeptItem[]
+	}
+}
+
 
 export namespace dashboard {
 	export interface ReportData {

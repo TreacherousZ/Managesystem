@@ -1,17 +1,25 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { UserWrapper } from './styls'
-import { Button, Form, Input, Select, Space, Table } from 'antd'
+import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { PageParams, User } from '@/types/api'
 import api from '@/api'
 import { formatDate } from '@/utils'
 import CreateUser from './CreateUser'
-
+import { IAction, IModalProp } from '@/types/modal'
+import { message } from '@/utils/AntdGlobal'
+import { useAntdTable } from 'ahooks'
 
 const UserList = memo(() => {
-	const [form] = Form.useForm()
 	const [data, setData] = useState<User.UserItem[]>([])
 	const [total, setTotal] = useState(0)
+	const [userIds, setUserIds] = useState<number[]>([])
+
+	const [form] = Form.useForm()
+
+	const userRef = useRef<{
+		open: (type: IAction, data?: User.UserItem) => void | undefined
+	}>()
 	const [pagination, setPagination] = useState({
 		current: 1,
 		pageSize: 10
@@ -23,6 +31,58 @@ const UserList = memo(() => {
 		})
 	}, [pagination.current, pagination.pageSize])
 
+
+	//创建用户
+	const handleCreate = () => {
+		userRef.current?.open('create')
+	}
+
+
+	//编辑用户
+	const handleEdit = (record: User.UserItem) => {
+		userRef.current?.open('eidt', record)
+	}
+
+	//删除用户
+	const handelDel = (userId: number) => {
+		Modal.confirm({
+			title: '删除确认',
+			content: <span>确认删除该用户吗？</span>,
+			onOk: () => {
+				handleUserDelSubmit([userId])
+			}
+		})
+	}
+
+	//批量删除确认
+	const handlePatchConfirm = () => {
+		if (userIds.length === 0) {
+			message.error('请选择要删除的用户')
+			return
+		}
+		Modal.confirm({
+			title: '删除确认',
+			content: <span>确认删除该批用户吗？</span>,
+			onOk: () => {
+				handleUserDelSubmit(userIds)
+			}
+		})
+	}
+
+	// 公共删除用户接口
+	const handleUserDelSubmit = async (ids: number[]) => {
+		const data = await api.delUser({
+			userIds: ids
+		})
+		message.success('删除成功')
+		setUserIds([])
+		getUserList({
+			pageNum: 1,
+			pageSize: pagination.pageSize
+		})
+	}
+
+
 	//搜索
 	const handleSearch = () => {
 		getUserList({
@@ -30,8 +90,10 @@ const UserList = memo(() => {
 			pageSize: pagination.pageSize
 		})
 	}
-//重置表单
-	const handleReset = ()=>{
+
+
+	//重置表单
+	const handleReset = () => {
 		form.resetFields()
 	}
 
@@ -44,13 +106,9 @@ const UserList = memo(() => {
 			pageNum: params.pageNum,
 			pageSize: params.pageSize
 		})
-		const list = Array.from({ length: 50 }).fill({}).map((item: any) => {
-			item = { ...data.list[0] }
-			item.userId = Math.random()
-			return item
-		})
-		setData(list)
-		setTotal(list.length)
+
+		setData(data.list)
+		setTotal(data.list.length)
 		setPagination({
 			current: data.page.pageNum,
 			pageSize: data.page.pageSize
@@ -125,12 +183,11 @@ const UserList = memo(() => {
 		},
 		{
 			title: '操作',
-			dataIndex: 'address',
 			key: 'address',
-			render() {
+			render(record: User.UserItem) {
 				return <Space>
-					<Button type='primary'>编辑</Button>
-					<Button type='primary'>删除</Button>
+					<Button type='text' onClick={() => handleEdit(record)}>编辑</Button>
+					<Button type='text' onClick={() => handelDel(record.userId)}>删除</Button>
 				</Space>
 			}
 		}
@@ -164,27 +221,33 @@ const UserList = memo(() => {
 				<div className="header">
 					<div className="title">用户列表</div>
 					<div className="action">
-						<Button type='primary'>新增</Button>
-						<Button type='primary' danger>批量删除</Button>
+						<Button type='primary' onClick={handleCreate}>新增</Button>
+						<Button type='primary' danger onClick={handlePatchConfirm}>批量删除</Button>
 					</div>
 				</div>
 				<Table
 					bordered
 					rowKey='userId'
-					rowSelection={{ type: 'checkbox' }}
+					rowSelection={{
+						type: 'checkbox',
+						selectedRowKeys: userIds,
+						onChange: (selectedRowKeys: React.Key[]) => {
+							setUserIds(selectedRowKeys as number[])
+						}
+					}}
 					dataSource={data}
 					columns={columns}
 					pagination={{
 						position: ['bottomRight'],
 						current: pagination.current,
-						pageSize:pagination.pageSize,
+						pageSize: pagination.pageSize,
 						total,
-						showQuickJumper:true,
+						showQuickJumper: true,
 						showSizeChanger: true,
-						showTotal: function(total) {
+						showTotal: function (total) {
 							return `总共${total}条`
 						},
-						onChange:(page, pageSize)=>{
+						onChange: (page, pageSize) => {
 							setPagination({
 								current: page,
 								pageSize
@@ -194,7 +257,15 @@ const UserList = memo(() => {
 				/>
 
 			</div>
-			<CreateUser />
+			<CreateUser
+				mRef={userRef}
+				update={() => {
+					getUserList({
+						pageNum: 1,
+						pageSize: pagination.pageSize
+					})
+				}
+				} />
 		</UserWrapper>
 	)
 })

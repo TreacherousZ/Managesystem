@@ -1,4 +1,4 @@
-import "./App.less";
+import './App.less'
 import Router from './router'
 import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider, App as AntdApp } from 'antd'

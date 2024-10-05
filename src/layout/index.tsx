@@ -7,6 +7,7 @@ import SideMenu from '@/components/SideMenu'
 import styles from './index.module.less'
 import api from '@/api'
 import { useStore } from '@/store'
+
 const { Content, Sider } = Layout
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
 		updateUserInfo(data)
 	}
 	return (
+
 		<Watermark content='TreacherousZ' inherit={false}>
 			<Layout>
 				<Sider collapsed={collapsed}>
@@ -35,6 +37,7 @@ const App: React.FC = () => {
 				</Layout>
 			</Layout>
 		</Watermark>
+
 	)
 }
 
