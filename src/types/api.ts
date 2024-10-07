@@ -149,4 +149,7 @@ export namespace Menu {
 		buttons?: MenuItem[]
 		children?: MenuItem[]
 	}
+	export interface EditParams extends CreateParams{
+		id?: string
+	}
 }

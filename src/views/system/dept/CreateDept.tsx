@@ -7,7 +7,7 @@ import api from "@/api";
 import { message } from '@/utils/AntdGlobal'
 
 
-export default function CreatrDept(props: IModalProp) {
+export default function CreatrDept(props: IModalProp<Dept.EidtParams>) {
 	const [form] = useForm()
 	const [action, setAction] = useState<IAction>('create')
 	const [deptList, setDeptList] = useState<Dept.DeptItem[]>([])
