@@ -1,17 +1,16 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import { Button, Form, Input, Modal, Space, Table } from 'antd'
-import { DeptListWrapper } from './style'
+import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import CreatrDept from './CreateDept'
 import api from '@/api'
-import { Dept } from '@/types/api'
+import { Dept, Menu } from '@/types/api'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
 import { message } from '@/utils/AntdGlobal'
 import { formatDate } from '@/utils'
-const DeptList = memo(() => {
+import { MenuListWrapper } from './style'
+const MenuList = memo(() => {
 	const [form] = useForm()
-	const [data, setData] = useState<Dept.DeptItem[]>([])
+	const [data, setData] = useState<Menu.MenuItem[]>([])
 
 	const deptRef = useRef<{
 		open: (type: IAction, data?: Dept.EidtParams | { parentId: string }) => void
@@ -21,7 +20,7 @@ const DeptList = memo(() => {
 	}
 
 	useEffect(() => {
-		getDeptList()
+		getMenuList()
 	}, [])
 
 	const handleDelet = (id:string) => {
@@ -39,43 +38,60 @@ const DeptList = memo(() => {
 			_id
 		})
 		message.success('删除成功')
-		getDeptList()
+		getMenuList()
 	}
 
 	const handleSubCreate = (id: string) => {
 		deptRef.current?.open('create', { parentId: id })
 	}
-	const getDeptList = async () => {
-		const data = await api.getDeptList(form.getFieldsValue())
+	const getMenuList = async () => {
+		const data = await api.getMenuList(form.getFieldsValue())
 		setData(data)
 	}
 	const handleReset = () => {
 		form.resetFields()
 	}
-	const handleEdit = (record: Dept.DeptItem) => {
-		deptRef.current?.open('edit', record)
+	const handleEdit = (record: Menu.MenuItem) => {
+		// deptRef.current?.open('edit', record)
 	}
 
-	const columns: ColumnsType<Dept.DeptItem> = [
+	const columns: ColumnsType<Menu.MenuItem> = [
 		{
-			title: '部门名称',
-			dataIndex: 'deptName',
-			key: 'deptName',
-			width: 200
+			title: '菜单名称',
+			dataIndex: 'menuName',
+			key: 'menuName',
 		},
 		{
-			title: '负责人',
-			dataIndex: 'userName',
-			key: 'userName',
-			width: 150
+			title: '菜单图标',
+			dataIndex: 'icon',
+			key: 'icon',
 		},
 		{
-			title: '更新时间',
-			dataIndex: 'updateTime',
-			key: 'updateTime',
-			render(updateTime){
-				return formatDate(updateTime)
+			title: '菜单类型',
+			dataIndex: 'menuType',
+			key: 'menuType',
+			render(menuType: number){
+				return {
+					1:'菜单',
+					2:'按钮',
+					3:'页面'
+				}[menuType]
 			}
+		},
+		{
+			title: '权限标识',
+			dataIndex: 'menuCode',
+			key: 'menuCode',
+		},
+		{
+			title: '路由地址',
+			dataIndex: 'path',
+			key: 'path',
+		},
+		{
+			title: '组件名称',
+			dataIndex: 'component',
+			key: 'component',
 		},
 		{
 			title: '创建时间',
@@ -84,7 +100,8 @@ const DeptList = memo(() => {
 			render(createTime){
 				return formatDate(createTime)
 			}
-		}, {
+		},
+		{
 			title: '操作',
 			key: 'action',
 			width: 200,
@@ -98,29 +115,34 @@ const DeptList = memo(() => {
 		}
 	]
 	return (
-		<DeptListWrapper>
+			<MenuListWrapper>
 			<Form className='searchForm' layout='inline' form={form}>
-				<Form.Item label='部门名称' name='deptName'>
-					<Input placeholder='部门名称' />
+				<Form.Item label='菜单名称' name='menuName'>
+					<Input placeholder='菜单名称' />
+				</Form.Item>
+				<Form.Item label='菜单状态' name='menuState' >
+					<Select className='menuState'>
+						<Select.Option value={1}>正常</Select.Option>
+						<Select.Option value={2}>停用</Select.Option>
+					</Select>
 				</Form.Item>
 				<Form.Item>
-					<Button type='primary' className='mr10' onClick={getDeptList}>搜索</Button>
+					<Button type='primary' className='mr10' onClick={getMenuList}>搜索</Button>
 					<Button type='default' onClick={handleReset}>重置</Button>
 				</Form.Item>
 			</Form>
 
 			<div className='baseTable'>
 				<div className='header'>
-					<div className='title'>部门列表</div>
+					<div className='title'>菜单列表</div>
 					<div className='action'>
 						<Button type='primary' onClick={handleCreate}>新增</Button>
 					</div>
 				</div>
 				<Table bordered rowKey='_id' columns={columns} dataSource={data} pagination={false} />
 			</div>
-			<CreatrDept mRef={deptRef} update={getDeptList} />
-		</DeptListWrapper>
+			</MenuListWrapper>
 	)
 })
 
-export default DeptList
+export default MenuList

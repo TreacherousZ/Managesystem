@@ -16,7 +16,7 @@ export interface ResultData<T = any> {
 	}
 }
 
-export interface PageParams{
+export interface PageParams {
 	pageNum: number;
 	pageSize: number
 }
@@ -29,8 +29,8 @@ export namespace Login {
 }
 
 export namespace User {
-	export interface Params extends PageParams{
-		userId?:number
+	export interface Params extends PageParams {
+		userId?: number
 		userName?: string
 		state?: number
 	}
@@ -62,18 +62,31 @@ export namespace User {
 		userImg: string
 	}
 
-	export interface EditParams extends CreateParams{
-		userId:number
+	export interface EditParams extends CreateParams {
+		userId: number
 	}
 }
 export namespace Dept {
-	export interface Params{
-		deptName?:string
+	export interface Params {
+		deptName?: string
 
 	}
-	export interface DeptItem{
-		_id:string
-		createTime:string
+	export interface CreateParams {
+		deptName: string
+		parentId?: string
+		userName: string
+	}
+	export interface EidtParams extends CreateParams {
+		_id: string
+	}
+	export interface DelParams {
+		_id: string,
+
+	}
+
+	export interface DeptItem {
+		_id: string
+		createTime: string
 		updateTime: string
 		deptName: string
 		parentId: string
@@ -113,3 +126,27 @@ export namespace dashboard {
 
 
 
+export namespace Menu {
+	export interface Params {
+		menuName: string
+		menuState: number
+	}
+
+	export interface CreateParams {
+		menuName: string // 菜单名称
+		icon?: string    // 菜单图标
+		menuType: number;// 1: 菜单 2：按钮 3：页面
+		menuState: number// 1：正常 2：停用
+		menuCode?: string// 按钮权限标识
+		parentId?: string // 父级菜单ID
+		path?: string    // 菜单路径
+		component?: string // 组件名称
+		orderBy: number; // 组件排序
+	}
+	export interface MenuItem extends CreateParams {
+		_id: string;
+		createTime: string;
+		buttons?: MenuItem[]
+		children?: MenuItem[]
+	}
+}

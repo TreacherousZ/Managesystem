@@ -7,6 +7,8 @@ import Error403 from '@/views/403'
 import Layout from '@/layout/index'
 import UserList from "@/views/system/user";
 import DeptList from "@/views/system/dept";
+import MenuList from "@/views/system/menu";
+
 const router = [
 	{
 		path: '/',
@@ -34,6 +36,10 @@ const router = [
 			{
 				path: '/deptList',
 				element: <DeptList />
+			},
+			{
+				path: '/menuList',
+				element: <MenuList />
 			}
 		]
 	},

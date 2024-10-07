@@ -4,7 +4,7 @@
 
 
 import request from "@/utils/request";
-import { Dept, Login, ResultData, User, dashboard } from "@/types/api";
+import { Dept, Login, Menu, ResultData, User, dashboard } from "@/types/api";
 
 export default {
 	//登录
@@ -64,7 +64,26 @@ export default {
 
 	//部门管理
 	//部门列表
-	getDeptList(params: Dept.Params){
+	getDeptList(params?: Dept.Params){
 		return request.get<Dept.DeptItem[]>('/dept/list', params)
+	},
+	//获取当前账号下的所有用户
+	getAllUserList(){
+		return request.get<User.UserItem[]>('/users/all/list')
+	},
+	createDept(params: Dept.CreateParams){
+		return request.post('/dept/create', params)
+	},
+	eidtDept(params:Dept.EidtParams){
+		return request.post('/dept/edit', params)
+	},
+	deleteDept(params: Dept.DelParams){
+		return request.post('/dept/delete', params)
+	},
+	//菜单管理
+	getMenuList(params?: Menu.Params){
+		return request.get<Menu.MenuItem[]>('/menu/list', params)
 	}
+
+
 }
