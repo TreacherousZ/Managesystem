@@ -14,10 +14,10 @@ const MenuList = memo(() => {
 	const [data, setData] = useState<Menu.MenuItem[]>([])
 
 	const menuRef = useRef<{
-		open: (type: IAction, data?: Menu.EditParams | { parentId: string }) => void
+		open: (type: IAction, data?: Menu.EditParams | { parentId?: string, orderBy?: number }) => void
 	}>()
 	const handleCreate = () => {
-		menuRef.current?.open('create')
+		menuRef.current?.open('create',{orderBy: data.length})
 	}
 
 	useEffect(() => {
@@ -27,7 +27,7 @@ const MenuList = memo(() => {
 	const handleDelet = (id:string) => {
 		Modal.confirm({
 			title:'确认',
-			content:'确认删除改部门吗？',
+			content:'确认删除该菜单吗？',
 			onOk:()=>{
 				handleDelSubmit(id)
 			}
@@ -35,7 +35,7 @@ const MenuList = memo(() => {
 		})
 	}
 	const handleDelSubmit = async (_id:string)=>{
-		await api.deleteDept({
+		await api.deleteMenu({
 			_id
 		})
 		message.success('删除成功')
@@ -53,7 +53,7 @@ const MenuList = memo(() => {
 		form.resetFields()
 	}
 	const handleEdit = (record: Menu.MenuItem) => {
-		// menuRef.current?.open('edit', record)
+		menuRef.current?.open('edit', record)
 	}
 
 	const columns: ColumnsType<Menu.MenuItem> = [
@@ -117,7 +117,7 @@ const MenuList = memo(() => {
 	]
 	return (
 			<MenuListWrapper>
-			<Form className='searchForm' layout='inline' form={form}>
+			<Form className='searchForm' layout='inline' form={form} initialValues={{menuState: 1}}>
 				<Form.Item label='菜单名称' name='menuName'>
 					<Input placeholder='菜单名称' />
 				</Form.Item>

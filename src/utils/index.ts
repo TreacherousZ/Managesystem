@@ -2,6 +2,8 @@
  * 工具函数封装
  */
 
+import { Menu } from "@/types/api"
+
 //格式化金额
 export const fotmatMoney = (num: number | string) => {
 	const a = parseFloat(num.toString())
@@ -48,4 +50,9 @@ export const formatState = (state: number) => {
 	if (state === 3) return '离职'
 }
 
-
+//获取页面路径
+export const getMenuPath = (list: Menu.MenuItem[]): string[]=>{
+	return list.reduce((result: string[],item:Menu.MenuItem)=>{
+		return result.concat(Array.isArray(item.children) && !item.buttons ? getMenuPath(item.children): item.path+'')
+	},[])
+}

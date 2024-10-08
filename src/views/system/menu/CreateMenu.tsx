@@ -36,9 +36,9 @@ export default function CreateMenu(props: IModalProp<Menu.EditParams>) {
 		const valid = await form.validateFields()
 		if (valid) {
 			if (action === 'create') {
-				await api.createDept(form.getFieldsValue())
+				await api.createMenu(form.getFieldsValue())
 			} else {
-				await api.eidtDept(form.getFieldsValue())
+				await api.editMenu(form.getFieldsValue())
 			}
 			message.success('操作成功')
 			handleCancel()
@@ -66,7 +66,7 @@ export default function CreateMenu(props: IModalProp<Menu.EditParams>) {
 				<Form.Item hidden name='_id'>
 					<Input />
 				</Form.Item>
-				<Form.Item label='上级部门' name='parentId'>
+				<Form.Item label='上级菜单' name='parentId'>
 					<TreeSelect
 						placeholder='请选择父级菜单'
 						allowClear
@@ -84,7 +84,7 @@ export default function CreateMenu(props: IModalProp<Menu.EditParams>) {
 						<Radio value={3}>页面</Radio>
 					</Radio.Group>
 				</Form.Item>
-				<Form.Item label='菜单名称' name='deptName' rules={[{ required: true, message: '请输入菜单名称' }]}>
+				<Form.Item label='菜单名称' name='menuName' rules={[{ required: true, message: '请输入菜单名称' }]}>
 					<Input placeholder="请输入菜单名称" />
 				</Form.Item>
 				<Form.Item noStyle shouldUpdate>
@@ -111,7 +111,7 @@ export default function CreateMenu(props: IModalProp<Menu.EditParams>) {
 				<Form.Item label='组件名称' name='component' >
 					<Input placeholder="请输入菜单名称" />
 				</Form.Item>
-				<Form.Item label='排序' name='icon' tooltip={{ title: '排序值越大越靠后', icon: <InfoCircleOutlined /> }}>
+				<Form.Item label='排序' name='orderBy' tooltip={{ title: '排序值越大越靠后', icon: <InfoCircleOutlined /> }}>
 					<InputNumber placeholder="请输入排序值" />
 				</Form.Item>
 				<Form.Item label='菜单状态' name='menuState'>

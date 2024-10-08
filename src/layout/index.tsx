@@ -19,6 +19,8 @@ const App: React.FC = () => {
 		const data = await api.getUserInfo()
 		updateUserInfo(data)
 	}
+
+
 	return (
 
 		<Watermark content='TreacherousZ' inherit={false}>

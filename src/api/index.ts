@@ -61,6 +61,9 @@ export default {
 	delUser(params: {userIds: number[]}) {
 		return request.post('/users/delete', params)
 	},
+	getPermissionList(){
+		return request.get<{buttonList: string[], menuList: Menu.MenuItem[]}>('/users/getPermissionList')
+	},
 
 	//部门管理
 	//部门列表
@@ -83,7 +86,15 @@ export default {
 	//菜单管理
 	getMenuList(params?: Menu.Params){
 		return request.get<Menu.MenuItem[]>('/menu/list', params)
+	},
+	createMenu(params: Menu.CreateParams){
+		return request.post('/menu/create', params)
+	},
+	editMenu(params:Menu.EditParams){
+		return request.post('/menu/edit', params)
+	},
+	deleteMenu(params: Menu.DelParams){
+		return  request.post('/menu/delete', params)
 	}
-
 
 }

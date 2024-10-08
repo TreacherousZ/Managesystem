@@ -1,4 +1,4 @@
-import { Navigate, useRoutes } from "react-router-dom";
+import { createBrowserRouter, Navigate, useRoutes } from "react-router-dom";
 import Login from '@/views/login/Login'
 import Welcome from '@/views/Welcome'
 import Dashboard from "@/views/dashboard";
@@ -8,7 +8,7 @@ import Layout from '@/layout/index'
 import UserList from "@/views/system/user";
 import DeptList from "@/views/system/dept";
 import MenuList from "@/views/system/menu";
-
+import AuthLoader from "./AuthLoader";
 const router = [
 	{
 		path: '/',
@@ -19,7 +19,9 @@ const router = [
 		element: <Login />
 	},
 	{
+		id:'layout',
 		element: <Layout />,
+		loader:AuthLoader,
 		children: [
 			{
 				path: '/welcome',
@@ -53,6 +55,4 @@ const router = [
 	}
 ]
 
-export default function Router() {
-	return useRoutes(router)
-}
+export default createBrowserRouter(router)

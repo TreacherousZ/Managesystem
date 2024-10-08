@@ -152,4 +152,7 @@ export namespace Menu {
 	export interface EditParams extends CreateParams{
 		id?: string
 	}
+	export interface DelParams {
+		_id:string
+	}
 }
