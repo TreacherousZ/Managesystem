@@ -24,7 +24,7 @@ const CreateUser = (props: IModalProp) => {
 	const open = (type: IAction, data?: User.UserItem) => {
 		setAction(type)
 		setVisbile(true)
-		if (type === 'eidt' && data) {
+		if (type === 'edit' && data) {
 			form.setFieldsValue(data)
 			setImg(data.userImg)
 		}

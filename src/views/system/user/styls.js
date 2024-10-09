@@ -5,9 +5,6 @@ export const UserWrapper = styled.div`
   /* background-color: #fff; */
   height: calc(85.4vh);
 
-	.ant-select{
-		width:120px
-	}
 
 
 `

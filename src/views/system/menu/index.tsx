@@ -17,24 +17,24 @@ const MenuList = memo(() => {
 		open: (type: IAction, data?: Menu.EditParams | { parentId?: string, orderBy?: number }) => void
 	}>()
 	const handleCreate = () => {
-		menuRef.current?.open('create',{orderBy: data.length})
+		menuRef.current?.open('create', { orderBy: data.length })
 	}
 
 	useEffect(() => {
 		getMenuList()
 	}, [])
 
-	const handleDelet = (id:string) => {
+	const handleDelet = (id: string) => {
 		Modal.confirm({
-			title:'确认',
-			content:'确认删除该菜单吗？',
-			onOk:()=>{
+			title: '确认',
+			content: '确认删除该菜单吗？',
+			onOk: () => {
 				handleDelSubmit(id)
 			}
 
 		})
 	}
-	const handleDelSubmit = async (_id:string)=>{
+	const handleDelSubmit = async (_id: string) => {
 		await api.deleteMenu({
 			_id
 		})
@@ -71,11 +71,11 @@ const MenuList = memo(() => {
 			title: '菜单类型',
 			dataIndex: 'menuType',
 			key: 'menuType',
-			render(menuType: number){
+			render(menuType: number) {
 				return {
-					1:'菜单',
-					2:'按钮',
-					3:'页面'
+					1: '菜单',
+					2: '按钮',
+					3: '页面'
 				}[menuType]
 			}
 		},
@@ -98,7 +98,7 @@ const MenuList = memo(() => {
 			title: '创建时间',
 			dataIndex: 'createTime',
 			key: 'createTime',
-			render(createTime){
+			render(createTime) {
 				return formatDate(createTime)
 			}
 		},
@@ -116,8 +116,8 @@ const MenuList = memo(() => {
 		}
 	]
 	return (
-			<MenuListWrapper>
-			<Form className='searchForm' layout='inline' form={form} initialValues={{menuState: 1}}>
+		<MenuListWrapper>
+			<Form className='searchForm' layout='inline' form={form} initialValues={{ menuState: 1 }}>
 				<Form.Item label='菜单名称' name='menuName'>
 					<Input placeholder='菜单名称' />
 				</Form.Item>
@@ -142,8 +142,8 @@ const MenuList = memo(() => {
 				</div>
 				<Table bordered rowKey='_id' columns={columns} dataSource={data} pagination={false} />
 			</div>
-			<CreateMenu mRef={menuRef} update={getMenuList}/>
-			</MenuListWrapper>
+			<CreateMenu mRef={menuRef} update={getMenuList} />
+		</MenuListWrapper>
 	)
 })
 

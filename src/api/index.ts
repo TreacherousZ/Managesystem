@@ -4,7 +4,7 @@
 
 
 import request from "@/utils/request";
-import { Dept, Login, Menu, ResultData, User, dashboard } from "@/types/api";
+import { Dept, Login, Menu, ResultData, Role, User, dashboard } from "@/types/api";
 
 export default {
 	//登录
@@ -95,6 +95,16 @@ export default {
 	},
 	deleteMenu(params: Menu.DelParams){
 		return  request.post('/menu/delete', params)
+	},
+	//角色管理
+	getRoleList(params:Role.Params){
+		return request.get<ResultData<Role.RoleItem>>('/roles/list',params)
+	},
+	createRole(params: Role.CreateParams){
+		return request.post('/roles/create', params)
+	},
+	editRole(params: Role.EditParams) {
+		return request.post('/roles/edit', params)
 	}
 
 }
