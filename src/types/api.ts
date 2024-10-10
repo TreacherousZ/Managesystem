@@ -35,10 +35,10 @@ export namespace User {
 		state?: number
 	}
 	export interface SearchParams {
-    userId?: number
-    userName?: string
-    state?: number
-  }
+		userId?: number
+		userName?: string
+		state?: number
+	}
 
 	export interface UserItem {
 		"_id": string,
@@ -154,31 +154,39 @@ export namespace Menu {
 		buttons?: MenuItem[]
 		children?: MenuItem[]
 	}
-	export interface EditParams extends CreateParams{
+	export interface EditParams extends CreateParams {
 		id?: string
 	}
 	export interface DelParams {
-		_id:string
+		_id: string
 	}
 }
 
 export namespace Role {
-  export interface Params extends PageParams {
-    roleName?: string
-  }
-  export interface CreateParams {
-    roleName: string
-    remark?: string
-  }
-  export interface RoleItem extends CreateParams {
-    _id: string
-    permissionList: {
-      checkedKeys: string[]
-    }
-    updateTime: string
-    createTime: string
-  }
+	export interface Params extends PageParams {
+		roleName?: string
+	}
+	export interface CreateParams {
+		roleName: string
+		remark?: string
+	}
+	export interface RoleItem extends CreateParams {
+		_id: string
+		permissionList: {
+			checkedKeys: string[],
+			halfCheckedKeys: string[]
+		}
+		updateTime: string
+		createTime: string
+	}
 	export interface EditParams extends CreateParams {
-		_id:string
+		_id: string
+	}
+	export interface Permission {
+		_id: string
+		permissionList: {
+			checkedKeys: string[],
+			halfCheckedKeys: string[]
+		}
 	}
 }

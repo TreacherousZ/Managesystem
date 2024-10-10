@@ -1,7 +1,7 @@
 import React, { memo, useRef } from 'react'
 import { RoleWrapper } from './style'
 import { useAntdTable } from 'ahooks'
-import { Button, Form, Input, Space, Table } from 'antd'
+import { Button, Form, Input, message, Modal, Space, Table } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
 import { Role, User } from '@/types/api'
@@ -10,10 +10,17 @@ import { formatDate } from '@/utils'
 import CreateRole from './CreateRole'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
+import SetPremission from './setPremission'
+
 const RoleList = memo(() => {
 	const roleRef = useRef<{
 		open: (type: IAction, data?: Role.RoleItem) => void
 	}>()
+
+	const premissionRef = useRef<{
+		open: (type:IAction ,data?: Role.RoleItem) => void
+	}>()
+
 	const [form] = useForm()
 	const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: Role.Params) => {
 		return api
@@ -37,6 +44,23 @@ const RoleList = memo(() => {
 	const handleEdit = (data: Role.RoleItem) => {
 		roleRef.current?.open('edit', data)
 	}
+	//删除角色
+	const handleDelet = (_id: string) => {
+		Modal.confirm({
+			title: '确认',
+			content: <span>确认删除该角色吗？</span>,
+			async onOk() {
+				await api.delRole({ _id })
+				message.success('删除成功')
+				search.submit()
+			}
+		})
+	}
+	//设置权限
+	const handleSetPremission = (record:Role.RoleItem)=> {
+		premissionRef.current?.open('edit' ,record)
+	}
+
 
 	const { tableProps, search } = useAntdTable(getTableData, {
 		form,
@@ -75,9 +99,9 @@ const RoleList = memo(() => {
 			key: 'action',
 			render(_, record) {
 				return (<Space>
-					<Button onClick={() => handleEdit(record)}>编辑</Button>
-					<Button>设置权限</Button>
-					<Button>删除</Button>
+					<Button type='text' onClick={() => handleEdit(record)}>编辑</Button>
+					<Button type='text' onClick={()=>handleSetPremission(record) }>设置权限</Button>
+					<Button type='text' onClick={() => handleDelet(record._id)} danger>删除</Button>
 				</Space>
 				)
 			}
@@ -116,6 +140,7 @@ const RoleList = memo(() => {
 				/>
 			</div>
 			<CreateRole mRef={roleRef} update={search.submit} />
+			<SetPremission mRef={premissionRef} update={search.submit} />
 		</RoleWrapper>
 	)
 })
