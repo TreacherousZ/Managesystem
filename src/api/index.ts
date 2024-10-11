@@ -4,7 +4,7 @@
 
 
 import request from "@/utils/request";
-import { Dept, Login, Menu, ResultData, Role, User, dashboard } from "@/types/api";
+import { Dept, Login, Menu, Order, ResultData, Role, User, dashboard } from "@/types/api";
 
 export default {
 	//登录
@@ -109,11 +109,15 @@ export default {
 	delRole(params: { _id: string }) {
 		return request.post('/roles/delete', params)
 	},
-	updatePermission(params: Role.Permission){
+	updatePermission(params: Role.Permission) {
 		return request.post('/roles/update/permission', params)
 	},
-	getAllRoleList(){
+	getAllRoleList() {
 		return request.get<Role.RoleItem[]>('/roles/allList')
-	}
+	},
 
+	//订单
+	getOrderList(params: Order.Params) {
+		return request.get<ResultData<Order.OrderItem>>('/order/list', params)
+	}
 }

@@ -11,7 +11,8 @@ import MenuList from "@/views/system/menu";
 import AuthLoader from "./AuthLoader";
 import RoleList from "@/views/system/role";
 import path from "path";
-const router = [
+import OrderList from "@/views/order/OrderList";
+export const router = [
 	{
 		path: '/',
 		element: <Navigate to='/login' />
@@ -21,9 +22,9 @@ const router = [
 		element: <Login />
 	},
 	{
-		id:'layout',
+		id: 'layout',
 		element: <Layout />,
-		loader:AuthLoader,
+		loader: AuthLoader,
 		children: [
 			{
 				path: '/welcome',
@@ -43,11 +44,18 @@ const router = [
 			},
 			{
 				path: '/menuList',
-				element: <MenuList />
+				element: <MenuList />,
+				meta: {
+					auth: false
+				}
 			},
 			{
-				path:'/roleList',
-				element:<RoleList/>
+				path: '/roleList',
+				element: <RoleList />
+			},
+			{
+				path: '/orderList',
+				element: <OrderList />
 			}
 		]
 	},

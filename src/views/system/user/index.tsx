@@ -9,6 +9,7 @@ import CreateUser from './CreateUser'
 import { IAction, IModalProp } from '@/types/modal'
 import { message } from '@/utils/AntdGlobal'
 import { useAntdTable } from 'ahooks'
+import AuthBurron from '@/components/AuthButton'
 
 const UserList = memo(() => {
 	const [form] = Form.useForm()
@@ -184,9 +185,9 @@ const UserList = memo(() => {
         <div className='header'>
           <div className='title'>用户列表</div>
           <div className='action'>
-            <Button type='primary' onClick={handleCreate}>
+            <AuthBurron auth='create' type='primary' onClick={handleCreate}>
               新增
-            </Button>
+            </AuthBurron>
             <Button type='primary' danger onClick={handlePatchConfirm}>
               批量删除
             </Button>
