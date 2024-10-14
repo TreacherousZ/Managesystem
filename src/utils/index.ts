@@ -5,7 +5,7 @@
 import { Menu } from "@/types/api"
 
 //格式化金额
-export const fotmatMoney = (num: number | string) => {
+export const formatMoney = (num: number | string) => {
 	const a = parseFloat(num.toString())
 	return a.toLocaleString('zh-CN', { style: 'currency', currency: 'CNY' })
 }
@@ -71,3 +71,11 @@ export const searchRoute: any = (path: string, routes: any=[]) => {
 
 	return ''
 }
+
+//手机号加密
+export const formateMobile = (mobile?: number) => {
+  if (!mobile) return '-'
+  const phone = mobile.toString()
+  return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
+}
+

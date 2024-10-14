@@ -12,6 +12,7 @@ import AuthLoader from "./AuthLoader";
 import RoleList from "@/views/system/role";
 import path from "path";
 import OrderList from "@/views/order/OrderList";
+import DriverList from "@/views/order/DriverList";
 export const router = [
 	{
 		path: '/',
@@ -56,6 +57,10 @@ export const router = [
 			{
 				path: '/orderList',
 				element: <OrderList />
+			},
+			{
+				path: '/driverList',
+				element: <DriverList />
 			}
 		]
 	},
