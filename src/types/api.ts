@@ -272,4 +272,8 @@ export namespace Order {
 		orderCompleteCount: number // 昨日完单数
 		createTime: string // 创建时间
 	}
+	export interface OrderRoute {
+		orderId: string //订单ID
+		route: Array<{lng: string; lat: string}>
+	}
 }

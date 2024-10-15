@@ -13,6 +13,7 @@ import RoleList from "@/views/system/role";
 import path from "path";
 import OrderList from "@/views/order/OrderList";
 import DriverList from "@/views/order/DriverList";
+import OrderCluster from "@/views/order/OrderCluster";
 export const router = [
 	{
 		path: '/',
@@ -61,6 +62,10 @@ export const router = [
 			{
 				path: '/driverList',
 				element: <DriverList />
+			},
+			{
+				path: '/cluster',
+				element: <OrderCluster />
 			}
 		]
 	},

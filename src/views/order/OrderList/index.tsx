@@ -9,11 +9,15 @@ import CreateOrder from "./components/CreateOrder";
 import { formatDate, formatMoney } from "@/utils";
 import OrderDetai from "./components/OrderDetail";
 import { message } from "@/utils/AntdGlobal";
+import OrderMarker from "./components/OrderMarker";
+import OrderRoute from "./components/OrderRoute";
 
 export default function OrderList() {
 	const [form] = Form.useForm()
 	const orderRef = useRef<{ open: () => void }>()
 	const detailRef = useRef<{ open: (orderId: string) => void }>()
+	const markerRef = useRef<{ open: (orderId: string) => void }>()
+	const routeRef = useRef<{ open: (orderId: string) => void }>()
 	const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: Order.SearchParams) => {
 		return api
 			.getOrderList({
@@ -53,7 +57,7 @@ export default function OrderList() {
 			title: '城市',
 			dataIndex: 'cityName',
 			key: 'cityName',
-			width:80
+			width: 80
 		},
 		{
 			title: '下单地址',
@@ -71,7 +75,7 @@ export default function OrderList() {
 			title: '下单时间',
 			dataIndex: 'createTime',
 			key: 'createTime',
-			width:120,
+			width: 120,
 			render(createTime) {
 				return formatDate(createTime)
 			}
@@ -88,11 +92,11 @@ export default function OrderList() {
 			title: '订单状态',
 			dataIndex: 'state',
 			key: 'state',
-			render(state){
-				if(state===1) return '进行中'
-				if(state===2) return '已完成'
-				if(state===3) return '超时'
-				if(state===4) return '取消'
+			render(state) {
+				if (state === 1) return '进行中'
+				if (state === 2) return '已完成'
+				if (state === 3) return '超时'
+				if (state === 4) return '取消'
 			}
 		},
 		{
@@ -110,20 +114,30 @@ export default function OrderList() {
 			key: 'action',
 			render(_, record) {
 				return <Space>
-					<Button type='text' onClick={()=>handleDetail(record.orderId)}>详情</Button>
-					<Button type='text'>打点</Button>
-					<Button type='text'>轨迹</Button>
-					<Button type='text' danger onClick={()=> handleDel(record._id)}>删除</Button>
+					<Button type='text' onClick={() => handleDetail(record.orderId)}>详情</Button>
+					<Button type='text' onClick={() => handleMarker(record.orderId)}>打点</Button>
+					<Button type='text' onClick={() => handleRoute(record.orderId)}>轨迹</Button>
+					<Button type='text' danger onClick={() => handleDel(record._id)}>删除</Button>
 				</Space>
 			}
 		},
 	]
 
-	const handleDel=(_id: string)=>{
+	//行驶轨迹
+	const handleRoute = (orderId: string) => {
+		routeRef.current?.open(orderId)
+	}
+
+	//地图打点
+	const handleMarker = (orderId: string) => {
+		markerRef.current?.open(orderId)
+	}
+
+	const handleDel = (_id: string) => {
 		Modal.confirm({
-			title:'确认',
-			content:<span>确认删除订单吗？</span>,
-			onOk:async ()=> {
+			title: '确认',
+			content: <span>确认删除订单吗？</span>,
+			onOk: async () => {
 				await api.delOrder(_id)
 				message.success('删除成功')
 				search.submit()
@@ -131,7 +145,7 @@ export default function OrderList() {
 		})
 	}
 
-	const handleDetail = (orderId: string)=> {
+	const handleDetail = (orderId: string) => {
 		detailRef.current?.open(orderId)
 	}
 
@@ -142,49 +156,53 @@ export default function OrderList() {
 	return (
 		<OrderListWrapper>
 			<Form className='searchForm' form={form} layout='inline'>
-        <Form.Item name='orderId' label='订单ID'>
-          <Input placeholder='请输入用户ID' />
-        </Form.Item>
-        <Form.Item name='userName' label='用户名称'>
-          <Input placeholder='请输入用户名称' />
-        </Form.Item>
-        <Form.Item name='state' label='订单状态'>
-          <Select style={{ width: 120 }}>
-            <Select.Option value={1}>进行中</Select.Option>
-            <Select.Option value={2}>已完成</Select.Option>
-            <Select.Option value={3}>超时</Select.Option>
-            <Select.Option value={4}>取消</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Space>
-            <Button type='primary' onClick={search.submit}>
-              搜索
-            </Button>
-            <Button type='default' onClick={search.reset}>
-              重置
-            </Button>
-          </Space>
-        </Form.Item>
-      </Form>
-      <div className='baseTable'>
-        <div className='header'>
-          <div className='title'>用户列表</div>
-          <div className='action'>
-            <Button type='primary' onClick={handleCreate}>
-              新增
-            </Button>
+				<Form.Item name='orderId' label='订单ID'>
+					<Input placeholder='请输入用户ID' />
+				</Form.Item>
+				<Form.Item name='userName' label='用户名称'>
+					<Input placeholder='请输入用户名称' />
+				</Form.Item>
+				<Form.Item name='state' label='订单状态'>
+					<Select style={{ width: 120 }}>
+						<Select.Option value={1}>进行中</Select.Option>
+						<Select.Option value={2}>已完成</Select.Option>
+						<Select.Option value={3}>超时</Select.Option>
+						<Select.Option value={4}>取消</Select.Option>
+					</Select>
+				</Form.Item>
+				<Form.Item>
+					<Space>
+						<Button type='primary' onClick={search.submit}>
+							搜索
+						</Button>
+						<Button type='default' onClick={search.reset}>
+							重置
+						</Button>
+					</Space>
+				</Form.Item>
+			</Form>
+			<div className='baseTable'>
+				<div className='header'>
+					<div className='title'>用户列表</div>
+					<div className='action'>
+						<Button type='primary' onClick={handleCreate}>
+							新增
+						</Button>
 						<Button type='primary' onClick={handleExport}>
-              导出
-            </Button>
-          </div>
-        </div>
-        <Table bordered rowKey='_id' columns={columns} {...tableProps} />
-      </div>
-      {/* 创建订单组件 */}
-      <CreateOrder mRef={orderRef} update={search.submit} />
+							导出
+						</Button>
+					</div>
+				</div>
+				<Table bordered rowKey='_id' columns={columns} {...tableProps} />
+			</div>
+			{/* 创建订单组件 */}
+			<CreateOrder mRef={orderRef} update={search.submit} />
 			{/* 订单详情 */}
-			<OrderDetai mRef={detailRef}/>
+			<OrderDetai mRef={detailRef} />
+			{/* 地图打点 */}
+			<OrderMarker mRef={markerRef} />
+			{/* 行驶轨迹 */}
+			<OrderRoute mRef={routeRef} />
 		</OrderListWrapper>
 	)
 

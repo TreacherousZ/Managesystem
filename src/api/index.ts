@@ -143,8 +143,16 @@ export default {
 	exportData(params: Order.SearchParams){
 		return request.downloadFile('/order/orderExport', params, '订单列表.xlsx')
 	},
-	//获取袭击列表
+	//获取司机列表
 	getDriverList(params: Order.DriverParams){
 		return request.get<ResultData<Order.DriverItem>>('/order/driver/list', params)
+	},
+	//更新订单信息
+	updateOrderInfo(params:Order.OrderRoute){
+		return request.post('/order/edit', params)
+	},
+	getCityData(cityId: number) {
+		return request.get<Array<{lng: string, lat:string}>>(`/order/cluster/${cityId}`)
 	}
+
 }
