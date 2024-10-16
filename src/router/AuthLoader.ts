@@ -4,7 +4,7 @@ import { getMenuPath } from "@/utils";
 
 export interface IAuthLoader{
 	buttonList: string[]
-	menuList: Menu.MenuItem
+	menuList: Menu.MenuItem[]
 	menuPathList: string[]
 }
 

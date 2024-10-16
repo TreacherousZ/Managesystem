@@ -1,22 +1,19 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { HeaderWrapper } from './style'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Breadcrumb, Switch, Dropdown } from 'antd'
+import {  Switch, Dropdown } from 'antd'
 import type { MenuProps } from 'antd'
 import storage from '@/utils/storage'
 import { useStore } from '@/store'
+import BreadCrumb from './BreadCrumb'
 
 
 const NavHeader = memo(() => {
-	const {userInfo, collapsed, updateCollapsed} = useStore()
-	const breadList = [
-		{
-			title: '首页'
-		},
-		{
-			title: '工作台'
-		}
-	]
+ useEffect(()=>{
+	handleSwitch(isDark)
+ },[])
+
+	const {userInfo, collapsed, updateCollapsed, updateTheme, isDark} = useStore()
 
 	const items: MenuProps['items'] = [
 		{
@@ -41,16 +38,28 @@ const NavHeader = memo(() => {
 		}
 	}
 
+	const handleSwitch = (isDark: boolean)=>{
+		if(isDark){
+			document.documentElement.dataset.theme = 'dark'
+			document.documentElement.classList.add('dark')
+		} else {
+			document.documentElement.dataset.theme = 'light'
+			document.documentElement.classList.remove('dark')
+		}
+		storage.set('isDark', isDark)
+		updateTheme(isDark)
+	}
+
 	return (
 		<HeaderWrapper>
 			<div className='left'>
 				<div onClick={toggleCollapsed}>
 					{collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
 				</div>
-				<Breadcrumb items={breadList} style={{ marginLeft: 10 }} />
+				<BreadCrumb/>
 			</div>
 			<div className='right'>
-				<Switch checkedChildren='暗黑' unCheckedChildren='默认' style={{ marginRight: 10 }} />
+				<Switch checked={isDark} checkedChildren='暗黑' unCheckedChildren='默认' style={{ marginRight: 10 }} onChange={handleSwitch}/>
 				<Dropdown menu={{ items, onClick }} trigger={['click']}>
 					<span className='nickName'>{userInfo.userName}</span>
 				</Dropdown>

@@ -1,19 +1,23 @@
-import { createBrowserRouter, Navigate, useRoutes } from "react-router-dom";
-import Login from '@/views/login/Login'
-import Welcome from '@/views/Welcome'
-import Dashboard from "@/views/dashboard";
-import Error404 from '@/views/404'
-import Error403 from '@/views/403'
-import Layout from '@/layout/index'
-import UserList from "@/views/system/user";
-import DeptList from "@/views/system/dept";
-import MenuList from "@/views/system/menu";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import React from "react";
+
+// 懒加载组件
+const Login = React.lazy(() => import('@/views/login/Login'));
+const Welcome = React.lazy(() => import('@/views/Welcome'));
+const Dashboard = React.lazy(() => import('@/views/dashboard'));
+const Error404 = React.lazy(() => import('@/views/404'));
+const Error403 = React.lazy(() => import('@/views/403'));
+const Layout = React.lazy(() => import('@/layout/index'));
+const UserList = React.lazy(() => import('@/views/system/user'));
+const DeptList = React.lazy(() => import('@/views/system/dept'));
+const MenuList = React.lazy(() => import('@/views/system/menu'));
+const RoleList = React.lazy(() => import('@/views/system/role'));
+const OrderList = React.lazy(() => import('@/views/order/OrderList'));
+const DriverList = React.lazy(() => import('@/views/order/DriverList'));
+const OrderCluster = React.lazy(() => import('@/views/order/OrderCluster'));
+
 import AuthLoader from "./AuthLoader";
-import RoleList from "@/views/system/role";
-import path from "path";
-import OrderList from "@/views/order/OrderList";
-import DriverList from "@/views/order/DriverList";
-import OrderCluster from "@/views/order/OrderCluster";
+
 export const router = [
 	{
 		path: '/',
@@ -21,62 +25,88 @@ export const router = [
 	},
 	{
 		path: '/login',
-		element: <Login />
+		element: <React.Suspense fallback={<div>Loading...</div>}>
+			<Login />
+		</React.Suspense>
 	},
 	{
 		id: 'layout',
-		element: <Layout />,
+		element: <React.Suspense fallback={<div>Loading...</div>}>
+			<Layout />
+		</React.Suspense>,
 		loader: AuthLoader,
 		children: [
 			{
 				path: '/welcome',
-				element: <Welcome />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<Welcome />
+				</React.Suspense>
 			},
 			{
 				path: '/dashboard',
-				element: <Dashboard />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<Dashboard />
+				</React.Suspense>
 			},
 			{
 				path: '/userList',
-				element: <UserList />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<UserList />
+				</React.Suspense>
 			},
 			{
 				path: '/deptList',
-				element: <DeptList />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<DeptList />
+				</React.Suspense>
 			},
 			{
 				path: '/menuList',
-				element: <MenuList />,
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<MenuList />
+				</React.Suspense>,
 				meta: {
 					auth: false
 				}
 			},
 			{
 				path: '/roleList',
-				element: <RoleList />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<RoleList />
+				</React.Suspense>
 			},
 			{
 				path: '/orderList',
-				element: <OrderList />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<OrderList />
+				</React.Suspense>
 			},
 			{
 				path: '/driverList',
-				element: <DriverList />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<DriverList />
+				</React.Suspense>
 			},
 			{
 				path: '/cluster',
-				element: <OrderCluster />
+				element: <React.Suspense fallback={<div>Loading...</div>}>
+					<OrderCluster />
+				</React.Suspense>
 			}
 		]
 	},
 	{
 		path: '*',
-		element: <Error404 />
+		element: <React.Suspense fallback={<div>Loading...</div>}>
+			<Error404 />
+		</React.Suspense>
 	},
 	{
 		path: '/403',
-		element: <Error403 />
+		element: <React.Suspense fallback={<div>Loading...</div>}>
+			<Error403 />
+		</React.Suspense>
 	}
 ]
 
-export default createBrowserRouter(router)
+export default createBrowserRouter(router);

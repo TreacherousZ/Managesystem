@@ -51,31 +51,44 @@ export const formatState = (state: number) => {
 }
 
 //获取页面路径
-export const getMenuPath = (list: Menu.MenuItem[]): string[]=>{
-	return list.reduce((result: string[],item:Menu.MenuItem)=>{
-		return result.concat(Array.isArray(item.children) && !item.buttons ? getMenuPath(item.children): item.path+'')
-	},[])
+export const getMenuPath = (list: Menu.MenuItem[]): string[] => {
+	return list.reduce((result: string[], item: Menu.MenuItem) => {
+		return result.concat(Array.isArray(item.children) && !item.buttons ? getMenuPath(item.children) : item.path + '')
+	}, [])
 }
 
 
 //递归获取路由对象
-export const searchRoute: any = (path: string, routes: any=[]) => {
-	for(const item of routes) {
-		if(item.path === path) return item
-
-		if(item.children){
-			return searchRoute(path, item.children)
-
+export const searchRoute: any = (path: string, routes: any = []) => {
+	for (const item of routes) {
+		if (item.path === path) return item
+		if (item.children) {
+			const result = searchRoute(path, item.children)
+			if (result) return result
 		}
 	}
-
 	return ''
 }
 
 //手机号加密
 export const formateMobile = (mobile?: number) => {
-  if (!mobile) return '-'
-  const phone = mobile.toString()
-  return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
+	if (!mobile) return '-'
+	const phone = mobile.toString()
+	return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
 }
 
+//递归查找树的路径
+
+export const findTreeNode = (tree: Menu.MenuItem[], pathName: string, path: string[]): string[] => {
+	if (!tree) return []
+	for (const data of tree) {
+		path.push(data.menuName)
+		if (data.path === pathName) return path
+		if (data.children?.length) {
+			const list = findTreeNode(data.children, pathName, path)
+			if (list?.length) return list
+		}
+		path.pop()
+	}
+	return []
+}

@@ -11,8 +11,9 @@ import * as Icons from '@ant-design/icons'
 const SideMenu = memo(() => {
 	const [menuList, setMenuList] = useState<MenuItem[]>([])
 	const navigate = useNavigate()
-	const collapsed = useStore(state => state.collapsed)
-	const data: any = useRouteLoaderData('layout')
+	const collapsed = useStore(state => state.collapsed);
+	const isDark = useStore(state => state.isDark);
+		const data: any = useRouteLoaderData('layout')
 	const [selectedKeys, setSelectedKeys] = useState<string[]>([])
 
 	const { pathname } = useLocation()
@@ -88,8 +89,8 @@ const SideMenu = memo(() => {
 			</div>
 			<Menu
 				mode="inline"
-				theme="dark"
-				style={{ width: collapsed ? 80 : 'auto' }}
+				theme={isDark? 'light': 'dark'}
+				style={{ width: collapsed ? 80 : 'auto', height:'100vh' }}
 				items={menuList}
 				onClick={handleClickMenu}
 				selectedKeys={selectedKeys}

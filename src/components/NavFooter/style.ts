@@ -7,7 +7,8 @@ align-items: center;
 .footerContent {
 	text-align: center;
 	line-height: 30px;
-	color: #b0aeae;
+	color: var(--dark-color);
+	background-color: var(--dark-bg-color);
 	font-size: 14px;
 
 }

@@ -6,8 +6,8 @@ export const WelcomeWrapper = styled.div`
   align-items: center;
   padding: 40px 60px;  /* 增加左右和上下的填充 */
   margin: 0 auto;
-  background-color: #fff;
-  height: calc(85.44vh);
+  background-color: var(--dark-bg-color);
+  height: calc(81.3vh);
 
   .content {
     flex: 1;  /* 让内容部分占据剩余空间 */
@@ -19,7 +19,7 @@ export const WelcomeWrapper = styled.div`
     .subTitle {
       font-size: 30px;
       line-height: 42px;
-      color: black;
+			color:var(--dark-color);
     }
 
     .title {

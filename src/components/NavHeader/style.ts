@@ -6,7 +6,8 @@ justify-content: space-between;
 align-items: center;
 height: 64px;
 padding: 0 10px;
-background-color: white;
+background-color: var(--dark-bg-color);
+color: var(--dark-color);
 .left {
 	display: flex;
 	align-items: center;
@@ -27,7 +28,7 @@ background-color: white;
 
 .nickName {
 	cursor: pointer;
-	color: black;
+	color:var(--dark-color)
 }
 
 `

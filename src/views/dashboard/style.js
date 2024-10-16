@@ -4,8 +4,8 @@ import styled from "styled-components";
 export const DashboardWrapper = styled.div`
   padding: 40px 60px;  /* 增加左右和上下的填充 */
   margin: 0 auto;
-  background-color: #fff;
- 
+  background-color: var(--dark-bg-color);
+
 
 	.userInfo {
 		display: flex;
@@ -27,7 +27,7 @@ export const DashboardWrapper = styled.div`
 		padding: 10px;
 		margin-right: 20px;
 		border-radius: 5px;
-		color: white;
+		color: var(--dark-color);
 		font-size: 14px;
 
 		&:nth-child(1){
